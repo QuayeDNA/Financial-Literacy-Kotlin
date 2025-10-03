@@ -72,11 +72,13 @@ For technical specifications and implementation details, see [docs/JSON_PROMPT.j
    ```
 
 2. **Open in Android Studio**:
+
    - Launch Android Studio
    - Select "Open an existing Android Studio project"
    - Navigate to the cloned directory and select it
 
 3. **Configure Firebase**:
+
    - Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
    - Enable Authentication, Firestore, Storage, and Analytics
    - Download `google-services.json` and place it in the `app/` directory
@@ -133,4 +135,3 @@ For questions or support, please open an issue on GitHub or contact the developm
 ---
 
 **Note**: This repository currently contains project documentation and planning materials. The Android application code will be added in upcoming commits following the development roadmap outlined in the PRD.
-
