@@ -1,0 +1,534 @@
+{
+  "project_metadata": {
+    "project_name": "Gamified Financial Literacy Mobile App",
+    "project_id": "financial-literacy-app",
+    "platform": "Android",
+    "primary_language": "Kotlin",
+    "target_sdk": "API 34 (Android 14)",
+    "min_sdk": "API 24 (Android 7.0)",
+    "orientation": "portrait_only"
+  },
+  "project_objective": "Build a complete Android mobile application that teaches financial literacy through gamification. The app must educate users on budgeting, saving, investing, and debt management while keeping them engaged through game mechanics like XP points, badges, challenges, leaderboards, and daily streaks.",
+  "technical_stack": {
+    "architecture": "MVVM (Model-View-ViewModel)",
+    "ui_framework": "Jetpack Compose with Material Design 3",
+    "backend": {
+      "authentication": "Firebase Authentication (Email/Password, Google Sign-In)",
+      "database": "Firebase Firestore",
+      "analytics": "Firebase Analytics",
+      "cloud_functions": "Firebase Cloud Functions (for backend logic)",
+      "storage": "Firebase Cloud Storage (for user avatars/images)"
+    },
+    "local_storage": "Room Database (for offline functionality)",
+    "networking": "Retrofit 2 with OkHttp",
+    "dependency_injection": "Hilt (Dagger)",
+    "async_operations": "Kotlin Coroutines + Flow",
+    "navigation": "Jetpack Navigation Component",
+    "image_loading": "Coil"
+  },
+  "core_features": [
+    {
+      "feature_id": "F001",
+      "feature_name": "User Authentication & Onboarding",
+      "description": "Secure user registration and login with personalized onboarding flow",
+      "requirements": [
+        "Implement Firebase Authentication with email/password and Google Sign-In",
+        "Create a 3-5 screen onboarding flow introducing app features and gamification mechanics",
+        "Collect user profile information (age range, financial goals, experience level)",
+        "Display privacy policy and terms of service with acceptance checkbox",
+        "Implement smooth animated transitions between onboarding screens"
+      ],
+      "acceptance_criteria": [
+        "Users can register with email/password or Google account",
+        "Login persists across app restarts using Firebase Auth state",
+        "Onboarding only shows once per user (tracked in Firestore)",
+        "User profile data is stored in Firestore under /users/{userId}",
+        "All authentication errors display user-friendly error messages"
+      ]
+    },
+    {
+      "feature_id": "F002",
+      "feature_name": "Educational Modules System",
+      "description": "Interactive bite-sized lessons organized by financial topics with quizzes",
+      "requirements": [
+        "Create 5 main categories: Budgeting Basics, Saving Strategies, Investing 101, Debt Management, Financial Planning",
+        "Each category contains 5-8 lessons (30-40 lessons total)",
+        "Lessons include text content, images, and optional video embeds",
+        "Implement multiple-choice quizzes at the end of each lesson (3-5 questions)",
+        "Progressive lesson unlocking (must complete previous lesson to unlock next)",
+        "Track lesson completion status and quiz scores",
+        "Dynamic difficulty: Show advanced tips if user scores 100% on quizzes"
+      ],
+      "acceptance_criteria": [
+        "All lesson content loads from Firestore and caches locally for offline access",
+        "Quiz results are validated and stored in user's progress document",
+        "Users earn XP (50 points per lesson completion, bonus 20 for perfect quiz score)",
+        "Locked lessons display a lock icon and unlock message",
+        "Lesson progress syncs across devices in real-time",
+        "Users can bookmark lessons for quick access",
+        "Search functionality allows finding lessons by keyword"
+      ]
+    },
+    {
+      "feature_id": "F003",
+      "feature_name": "Budget Tracking Tool",
+      "description": "Comprehensive expense and income tracking with visual analytics",
+      "requirements": [
+        "Create expense entry form with fields: amount, category, date, description, receipt photo (optional)",
+        "Implement income tracking with source categorization",
+        "Predefined categories: Food, Transportation, Housing, Entertainment, Healthcare, Education, Savings, Other",
+        "Allow custom category creation",
+        "Monthly budget setting per category with alerts when approaching limit",
+        "Visual dashboards: pie charts for spending breakdown, line graphs for trends, monthly comparison",
+        "Export data as CSV or PDF report"
+      ],
+      "acceptance_criteria": [
+        "Expenses and income save to Firestore and Room database",
+        "App works fully offline; syncs when connection restored",
+        "Charts update in real-time as transactions are added",
+        "Budget alerts trigger push notifications at 80% and 100% of limit",
+        "Users can edit and delete transactions with confirmation dialog",
+        "Receipt photos upload to Firebase Storage and thumbnail displays in transaction list",
+        "Dashboard displays current month by default with date range picker",
+        "CSV export includes all transaction data with proper formatting"
+      ]
+    },
+    {
+      "feature_id": "F004",
+      "feature_name": "Gamification System",
+      "description": "Complete gamification mechanics to drive engagement and habit formation",
+      "requirements": [
+        "XP Points System: Award points for lesson completion (50), quiz perfection (20), logging expenses (5), daily login (10), goal achievement (100-500)",
+        "Level System: 20 levels with increasing XP requirements (Level 1: 0 XP, Level 2: 100 XP, exponential growth)",
+        "Badges: Design 30+ achievement badges (e.g., 'First Lesson', 'Budget Master', '7-Day Streak', '10K Saved')",
+        "Daily Streaks: Track consecutive login days with flame icon and streak counter",
+        "Leaderboard: Global and friends leaderboard showing top users by XP",
+        "Savings Challenges: Time-bound challenges (e.g., 'Save $100 in 30 days', 'No Coffee Week')",
+        "Reward Coins: Virtual currency earned alongside XP, usable for unlocking premium lessons or themes",
+        "Progress animations and confetti effects for level-ups and badge unlocks"
+      ],
+      "acceptance_criteria": [
+        "XP and level calculations are accurate and consistent",
+        "Level-up triggers animated modal with new level display and reward summary",
+        "Badges unlock automatically when criteria met and show unlock animation",
+        "Daily streak increments only once per calendar day (timezone-aware)",
+        "Streak breaks reset counter but preserve highest streak record",
+        "Leaderboard updates in real-time using Firestore listeners",
+        "Challenge progress displays with visual progress bars and countdown timers",
+        "All gamification data persists in Firestore under /users/{userId}/gamification",
+        "Reward coins balance displays in profile and updates correctly"
+      ]
+    },
+    {
+      "feature_id": "F005",
+      "feature_name": "Goal Setting & Tracking",
+      "description": "SMART financial goal creation with visual progress tracking",
+      "requirements": [
+        "Goal creation form: title, target amount, deadline, category (Emergency Fund, Vacation, Debt Payment, Investment, Custom)",
+        "Support multiple active goals simultaneously",
+        "Visual progress tracking: circular progress indicator, percentage complete, amount remaining",
+        "Manual contributions: users log savings toward specific goals",
+        "Automatic milestone celebrations at 25%, 50%, 75%, and 100% completion",
+        "Goal history archive when completed or abandoned",
+        "Suggested goals based on user's financial profile and completed lessons"
+      ],
+      "acceptance_criteria": [
+        "Goals save to Firestore with proper validation (amount > 0, future deadline)",
+        "Progress updates immediately when contributions logged",
+        "Milestone achievements trigger notifications and award bonus XP",
+        "Completed goals move to archive section with completion date",
+        "Dashboard shows top 3 active goals with progress bars",
+        "Users can edit goal details (except contributions history)",
+        "Goal deletion requires confirmation to prevent accidental loss"
+      ]
+    },
+    {
+      "feature_id": "F006",
+      "feature_name": "Personalized Financial Advice",
+      "description": "AI-driven financial tips based on user behavior and progress",
+      "requirements": [
+        "Implement Firebase Cloud Functions to analyze user spending patterns weekly",
+        "Generate personalized tips: e.g., 'You spent 40% more on dining this month', 'Consider increasing emergency fund'",
+        "Daily motivational notifications with financial wisdom quotes",
+        "In-app advice feed showing latest 10 personalized recommendations",
+        "Allow users to mark tips as helpful or dismiss them",
+        "Integrate simple ML model (Firebase ML or TensorFlow Lite) to predict overspending risk"
+      ],
+      "acceptance_criteria": [
+        "Cloud Functions run weekly without user intervention",
+        "Tips are relevant and specific to user's data (no generic placeholders)",
+        "Notifications respect user's quiet hours settings (9 PM - 8 AM silent)",
+        "Users can disable notifications in settings without losing in-app advice",
+        "Advice feed updates when new tips generated",
+        "Dismissed tips don't reappear",
+        "ML predictions display confidence percentage and explanation"
+      ]
+    },
+    {
+      "feature_id": "F007",
+      "feature_name": "Social & Community Features",
+      "description": "Friend system and community engagement for competitive motivation",
+      "requirements": [
+        "Add friends by username or email invitation",
+        "Friends leaderboard showing XP rankings",
+        "Challenge friends to savings competitions",
+        "Community discussion forum organized by topics (moderated)",
+        "Share achievements to social media (optional, with privacy controls)",
+        "Anonymous success stories feed"
+      ],
+      "acceptance_criteria": [
+        "Friend requests send in-app notifications",
+        "Privacy settings allow hiding profile from non-friends",
+        "Leaderboard only shows users who opted in (privacy setting)",
+        "Forum posts are moderated (basic profanity filter + report system)",
+        "Social media sharing includes app download link and branded image",
+        "Success stories can be liked and commented on"
+      ]
+    },
+    {
+      "feature_id": "F008",
+      "feature_name": "Profile & Settings",
+      "description": "User profile management and app customization",
+      "requirements": [
+        "Profile page showing: avatar, username, level, XP, total badges, member since date",
+        "Editable fields: profile photo, display name, bio",
+        "Settings: notification preferences, theme (light/dark/auto), language (future), currency",
+        "Account management: change password, delete account (with confirmation)",
+        "Privacy settings: profile visibility, leaderboard participation, data sharing preferences",
+        "Help & support: FAQ section, contact support form, app version info"
+      ],
+      "acceptance_criteria": [
+        "Profile changes save immediately to Firestore",
+        "Avatar upload compresses images and stores in Firebase Storage",
+        "Theme changes apply instantly without restart",
+        "Delete account removes all user data per GDPR (irreversible)",
+        "Support form sends to Firestore collection for admin review",
+        "All settings persist across app sessions and devices"
+      ]
+    }
+  ],
+  "ui_ux_requirements": {
+    "design_system": {
+      "style": "Material Design 3",
+      "color_scheme": {
+        "primary": "#4CAF50",
+        "secondary": "#FFC107",
+        "background": "#FFFFFF (light mode), #121212 (dark mode)",
+        "surface": "#F5F5F5 (light mode), #1E1E1E (dark mode)",
+        "error": "#F44336",
+        "success": "#4CAF50"
+      },
+      "typography": {
+        "primary_font": "Roboto",
+        "headings": "Bold, 20-32sp",
+        "body": "Regular, 14-16sp",
+        "captions": "Regular, 12sp"
+      },
+      "spacing": "8dp grid system",
+      "elevation": "Use Material elevation tokens (0-5) for cards and modals"
+    },
+    "navigation_structure": {
+      "type": "Bottom Navigation Bar",
+      "tabs": [
+        {
+          "tab_id": "home",
+          "label": "Home",
+          "icon": "ic_home",
+          "screen": "Dashboard with quick stats, active goals, and daily challenge"
+        },
+        {
+          "tab_id": "learn",
+          "label": "Learn",
+          "icon": "ic_school",
+          "screen": "Educational modules categorized view"
+        },
+        {
+          "tab_id": "budget",
+          "label": "Budget",
+          "icon": "ic_account_balance_wallet",
+          "screen": "Budget tracker and transaction list"
+        },
+        {
+          "tab_id": "community",
+          "label": "Community",
+          "icon": "ic_people",
+          "screen": "Leaderboards, friends, and forum"
+        },
+        {
+          "tab_id": "profile",
+          "label": "Profile",
+          "icon": "ic_person",
+          "screen": "User profile and settings"
+        }
+      ]
+    },
+    "animations": [
+      "Smooth shared element transitions between screens",
+      "Lottie animations for achievement unlocks and level-ups",
+      "Confetti effect when completing goals or earning badges",
+      "Progress bar animations with spring physics",
+      "Skeleton loading screens for async content",
+      "Pull-to-refresh with custom animation"
+    ],
+    "accessibility": [
+      "Minimum touch target size: 48dp x 48dp",
+      "Color contrast ratio: WCAG AA compliant (4.5:1 for normal text)",
+      "TalkBack screen reader support with meaningful content descriptions",
+      "Dynamic type support (respect system font size settings)",
+      "Haptic feedback for important actions"
+    ]
+  },
+  "data_models": {
+    "user_model": {
+      "collection": "users",
+      "fields": {
+        "userId": "String (Firebase Auth UID)",
+        "email": "String",
+        "displayName": "String",
+        "avatarUrl": "String?",
+        "bio": "String?",
+        "createdAt": "Timestamp",
+        "financialExperienceLevel": "String (Beginner|Intermediate|Advanced)",
+        "ageRange": "String (16-25|26-35|36-45)",
+        "currency": "String (USD|EUR|GBP|GHS)",
+        "privacySettings": {
+          "profileVisibility": "Boolean",
+          "leaderboardParticipation": "Boolean"
+        }
+      }
+    },
+    "gamification_model": {
+      "collection": "users/{userId}/gamification",
+      "document": "stats",
+      "fields": {
+        "xp": "Int",
+        "level": "Int",
+        "coins": "Int",
+        "badges": "Array<String> (badge IDs)",
+        "currentStreak": "Int",
+        "longestStreak": "Int",
+        "lastLoginDate": "Timestamp",
+        "totalLessonsCompleted": "Int",
+        "totalExpensesLogged": "Int"
+      }
+    },
+    "lesson_model": {
+      "collection": "lessons",
+      "fields": {
+        "lessonId": "String",
+        "title": "String",
+        "category": "String",
+        "content": "String (markdown)",
+        "imageUrl": "String?",
+        "videoUrl": "String?",
+        "order": "Int",
+        "quiz": {
+          "questions": "Array<QuizQuestion>"
+        },
+        "xpReward": "Int",
+        "estimatedMinutes": "Int"
+      }
+    },
+    "user_progress_model": {
+      "collection": "users/{userId}/progress",
+      "document": "{lessonId}",
+      "fields": {
+        "lessonId": "String",
+        "completed": "Boolean",
+        "completedAt": "Timestamp?",
+        "quizScore": "Int?",
+        "bookmarked": "Boolean"
+      }
+    },
+    "transaction_model": {
+      "collection": "users/{userId}/transactions",
+      "fields": {
+        "transactionId": "String",
+        "type": "String (expense|income)",
+        "amount": "Double",
+        "category": "String",
+        "description": "String",
+        "date": "Timestamp",
+        "receiptUrl": "String?",
+        "createdAt": "Timestamp"
+      }
+    },
+    "goal_model": {
+      "collection": "users/{userId}/goals",
+      "fields": {
+        "goalId": "String",
+        "title": "String",
+        "targetAmount": "Double",
+        "currentAmount": "Double",
+        "category": "String",
+        "deadline": "Timestamp",
+        "createdAt": "Timestamp",
+        "status": "String (active|completed|abandoned)",
+        "completedAt": "Timestamp?",
+        "contributions": "Array<Contribution>"
+      }
+    }
+  },
+  "firebase_setup_instructions": [
+    "Create Firebase project at console.firebase.google.com",
+    "Enable Firebase Authentication with Email/Password and Google Sign-In providers",
+    "Create Firestore database in production mode with proper security rules",
+    "Enable Firebase Analytics and Crashlytics",
+    "Set up Firebase Cloud Storage with security rules for user uploads",
+    "Configure Firebase Cloud Messaging for push notifications",
+    "Add google-services.json to app module",
+    "Implement proper security rules restricting read/write access to authenticated users' own data"
+  ],
+  "security_rules_template": {
+    "firestore_rules": "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /users/{userId} {\n      allow read, write: if request.auth != null && request.auth.uid == userId;\n    }\n    match /users/{userId}/{document=**} {\n      allow read, write: if request.auth != null && request.auth.uid == userId;\n    }\n    match /lessons/{lessonId} {\n      allow read: if request.auth != null;\n      allow write: if false;\n    }\n  }\n}",
+    "storage_rules": "rules_version = '2';\nservice firebase.storage {\n  match /b/{bucket}/o {\n    match /users/{userId}/{allPaths=**} {\n      allow read, write: if request.auth != null && request.auth.uid == userId;\n    }\n  }\n}"
+  },
+  "testing_requirements": {
+    "unit_tests": [
+      "ViewModel logic tests for all features",
+      "Repository pattern tests with mocked Firebase",
+      "XP calculation and level progression tests",
+      "Budget calculation and category aggregation tests",
+      "Goal progress calculation tests"
+    ],
+    "integration_tests": [
+      "Authentication flow end-to-end",
+      "Lesson completion and progress sync",
+      "Transaction creation and offline sync",
+      "Gamification triggers (XP award, badge unlock)"
+    ],
+    "ui_tests": [
+      "Critical user flows using Espresso or Compose UI Test",
+      "Navigation between all main screens",
+      "Form validation and error displays",
+      "Offline mode functionality"
+    ],
+    "coverage_target": "Minimum 70% code coverage"
+  },
+  "deployment_requirements": {
+    "build_variants": [
+      "debug (dev Firebase project)",
+      "release (production Firebase project with ProGuard)"
+    ],
+    "signing_config": "Configure keystore for release builds with proper key management",
+    "proguard_rules": "Optimize and obfuscate release builds while keeping Firebase and Compose classes",
+    "app_bundle": "Generate AAB (Android App Bundle) for Play Store submission",
+    "version_management": "Semantic versioning (1.0.0 for initial release)"
+  },
+  "acceptance_criteria_summary": {
+    "functional": [
+      "All 8 core features (F001-F008) are fully implemented and functional",
+      "Users can register, complete lessons, track expenses, and set goals without crashes",
+      "Offline mode allows lesson viewing and expense logging with automatic sync",
+      "Gamification awards XP, levels, badges correctly based on defined rules",
+      "Push notifications work for budget alerts and daily reminders",
+      "Data persists correctly in Firestore and syncs across devices",
+      "All forms validate inputs and display appropriate error messages"
+    ],
+    "performance": [
+      "App launch time: Under 2 seconds on mid-range devices",
+      "Screen transitions: Smooth 60fps animations",
+      "Firestore queries: Results display within 500ms on good connection",
+      "Image loading: Thumbnails display within 300ms using Coil caching",
+      "APK/AAB size: Under 50MB after optimization"
+    ],
+    "quality": [
+      "Zero critical bugs in production",
+      "Crash-free rate: 99.5% or higher",
+      "All screens support dark mode with proper contrast",
+      "App passes Android accessibility scanner with zero errors",
+      "Code follows Kotlin style guide and Android best practices",
+      "All hardcoded strings externalized to strings.xml for localization readiness"
+    ],
+    "user_experience": [
+      "Onboarding completion rate: >85%",
+      "Users understand gamification mechanics within first session",
+      "Budget tracker feels intuitive with minimal learning curve",
+      "No confusing error messages or cryptic technical jargon",
+      "Help/FAQ section answers top 10 user questions"
+    ],
+    "business_metrics": [
+      "App ready for Play Store submission with all required assets (screenshots, feature graphic, description)",
+      "Privacy policy and terms of service integrated and accessible",
+      "Analytics events properly configured to track key user actions",
+      "Firebase costs projected and optimized (Firestore queries, Storage bandwidth)",
+      "Roadmap ready for v1.1 feature additions"
+    ]
+  },
+  "project_structure": {
+    "packages": [
+      "data/ - Data layer with repositories, models, Firebase clients",
+      "data/local/ - Room database DAOs and entities",
+      "data/remote/ - Firebase Firestore and Auth services",
+      "domain/ - Business logic, use cases, domain models",
+      "presentation/ - UI layer organized by feature",
+      "presentation/auth/ - Login, registration screens",
+      "presentation/onboarding/ - Onboarding flow",
+      "presentation/home/ - Dashboard",
+      "presentation/learn/ - Educational modules",
+      "presentation/budget/ - Budget tracker",
+      "presentation/community/ - Social features",
+      "presentation/profile/ - User profile and settings",
+      "presentation/components/ - Reusable Compose components",
+      "di/ - Hilt dependency injection modules",
+      "utils/ - Helper classes, extensions, constants"
+    ]
+  },
+  "additional_instructions": [
+    "Follow clean architecture principles with clear separation of concerns",
+    "Use meaningful variable names and comprehensive code comments",
+    "Implement proper error handling with try-catch blocks and sealed Result classes",
+    "Log important events using Timber for debugging",
+    "Use Kotlin extension functions to reduce boilerplate",
+    "Implement proper lifecycle awareness in ViewModels and Composables",
+    "Use StateFlow/SharedFlow for reactive UI updates",
+    "Optimize Firestore reads with proper query limits and pagination",
+    "Implement exponential backoff for failed network requests",
+    "Add loading states for all async operations",
+    "Include empty states with helpful messages for all list screens",
+    "Compress uploaded images before sending to Firebase Storage",
+    "Cache network responses using Room for offline access",
+    "Use WorkManager for periodic background tasks (weekly analysis)",
+    "Implement proper deep linking for notifications",
+    "Add developer options menu (only visible in debug builds) for testing"
+  ],
+  "success_validation_checklist": [
+    "□ App builds successfully without errors in both debug and release variants",
+    "□ All Firebase services configured and operational",
+    "□ Authentication flows work for email/password and Google Sign-In",
+    "□ Users can complete at least one full lesson with quiz",
+    "□ Budget tracker saves and displays transactions correctly",
+    "□ XP system awards points and levels up users appropriately",
+    "□ At least 5 badges are unlockable and display properly",
+    "□ Daily streak increments correctly and persists across sessions",
+    "□ Goals can be created, tracked, and completed with milestone celebrations",
+    "□ Offline mode allows core functionality without internet",
+    "□ App syncs data when connection restored",
+    "□ Push notifications deliver for budget alerts",
+    "□ Leaderboard displays user rankings in real-time",
+    "□ Profile can be edited with avatar upload",
+    "□ Settings persist and theme changes apply correctly",
+    "□ App crashes are logged to Firebase Crashlytics",
+    "□ All analytics events fire correctly",
+    "□ App passes internal QA testing with no critical bugs",
+    "□ Security rules prevent unauthorized data access",
+    "□ App respects user privacy settings",
+    "□ Play Store listing assets prepared (screenshots, description, privacy policy)"
+  ],
+  "documentation_deliverables": [
+    "README.md with setup instructions and architecture overview",
+    "FIREBASE_SETUP.md with step-by-step Firebase configuration",
+    "API documentation for all repositories and use cases",
+    "User guide for in-app help section content",
+    "Developer handoff document with known issues and future improvements"
+  ],
+  "estimated_completion_timeline": {
+    "phase_1_foundation": "2-3 weeks - Project setup, architecture, authentication, onboarding",
+    "phase_2_core_features": "4-5 weeks - Educational modules, budget tracker, gamification system",
+    "phase_3_advanced_features": "2-3 weeks - Goals, advice engine, social features",
+    "phase_4_polish": "1-2 weeks - UI refinements, animations, accessibility improvements",
+    "phase_5_testing": "1-2 weeks - Comprehensive testing and bug fixes",
+    "phase_6_deployment": "1 week - Play Store preparation and submission",
+    "total_timeline": "11-16 weeks"
+  }
+}
