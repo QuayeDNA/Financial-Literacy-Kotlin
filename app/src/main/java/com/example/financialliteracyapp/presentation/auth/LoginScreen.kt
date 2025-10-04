@@ -7,15 +7,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun LoginScreen(
-    onLoginClick: (String, String) -> Unit,
+    onLoginSuccess: () -> Unit,
     onRegisterClick: () -> Unit,
-    isLoading: Boolean = false
+    viewModel: AuthViewModel = hiltViewModel()
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val authState by viewModel.authState.collectAsState()
+
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Authenticated) {
+            onLoginSuccess()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -51,11 +60,15 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = { onLoginClick(email, password) },
+            onClick = {
+                if (email.isNotBlank() && password.isNotBlank()) {
+                    viewModel.signIn(email, password)
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+            enabled = email.isNotBlank() && password.isNotBlank() && authState !is AuthState.Loading
         ) {
-            if (isLoading) {
+            if (authState is AuthState.Loading) {
                 CircularProgressIndicator(modifier = Modifier.size(20.dp))
             } else {
                 Text("Login")
@@ -66,6 +79,14 @@ fun LoginScreen(
 
         TextButton(onClick = onRegisterClick) {
             Text("Don't have an account? Register")
+        }
+
+        if (authState is AuthState.Error) {
+            Text(
+                text = (authState as AuthState.Error).message,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(top = 16.dp)
+            )
         }
     }
 }
