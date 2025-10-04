@@ -8,15 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(
-    userName: String = "User",
-    xp: Int = 0,
-    level: Int = 1,
-    onLearnClick: () -> Unit,
-    onBudgetClick: () -> Unit,
-    onCommunityClick: () -> Unit,
-    onProfileClick: () -> Unit
-) {
+fun HomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -24,50 +16,56 @@ fun HomeScreen(
     ) {
         // Header
         Text(
-            text = "Hello, $userName!",
+            text = "Welcome to Financial Literacy!",
             style = MaterialTheme.typography.headlineMedium
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
-            text = "Level $level • $xp XP",
+            text = "Your journey to financial freedom starts here.",
             style = MaterialTheme.typography.bodyLarge
         )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         // Quick Actions
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+        Text(
+            text = "Quick Actions",
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Placeholder cards for now
+        Card(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Button(onClick = onLearnClick) {
-                Text("Learn")
-            }
-            Button(onClick = onBudgetClick) {
-                Text("Budget")
-            }
-            Button(onClick = onCommunityClick) {
-                Text("Community")
-            }
-            Button(onClick = onProfileClick) {
-                Text("Profile")
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("📚 Start Learning", style = MaterialTheme.typography.titleMedium)
+                Text("Begin your financial education journey", style = MaterialTheme.typography.bodyMedium)
             }
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        // Daily Challenge
-        Card(modifier = Modifier.fillMaxWidth()) {
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = "Daily Challenge",
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text("Complete a lesson to earn bonus XP!")
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = onLearnClick) {
-                    Text("Start Learning")
-                }
+                Text("💰 Track Budget", style = MaterialTheme.typography.titleMedium)
+                Text("Monitor your expenses and savings", style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text("🎯 Set Goals", style = MaterialTheme.typography.titleMedium)
+                Text("Create and track your financial goals", style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
